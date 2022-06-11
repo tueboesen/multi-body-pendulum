@@ -1,0 +1,219 @@
+\documentclass{article}
+
+
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{authblk}
+\usepackage{physics} % for 'pdv' macro
+\usepackage{booktabs}
+\usepackage{fullpage}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{comment}
+\usepackage{array, makecell}
+\usepackage{theorem,ifthen}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{calrsfs}
+\DeclareMathAlphabet{\pazocal}{OMS}{zplm}{m}{n}
+%\newcommand{\La}{\mathcal{L}}
+\newcommand{\N}{\pazocal{N}}
+\newcommand{\E}{\pazocal{E}}
+
+\newcommand{\bfA}{{\bf A}}
+\newcommand{\bfB}{{\bf B}}
+\newcommand{\bfC}{{\bf C}}
+\newcommand{\bfD}{{\bf D}}
+\newcommand{\bfE}{{\bf E}}
+\newcommand{\bfF}{{\bf F}}
+\newcommand{\bfG}{{\bf G}}
+\newcommand{\bfH}{{\bf H}}
+\newcommand{\bfI}{{\bf I}}
+\newcommand{\bfJ}{{\bf J}}
+\newcommand{\bfK}{{\bf K}}
+\newcommand{\bfL}{{\bf L}}
+\newcommand{\bfM}{{\bf M}}
+\newcommand{\bfN}{{\bf N}}
+\newcommand{\bfO}{{\bf O}}
+\newcommand{\bfP}{{\bf P}}
+\newcommand{\bfQ}{{\bf Q}}
+\newcommand{\bfR}{{\bf R}}
+\newcommand{\bfS}{{\bf S}}
+\newcommand{\bfT}{{\bf T}}
+\newcommand{\bfU}{{\bf U}}
+\newcommand{\bfV}{{\bf V}}
+\newcommand{\bfW}{{\bf W}}
+\newcommand{\bfX}{{\bf X}}
+\newcommand{\bfY}{{\bf Y}}
+\newcommand{\bfZ}{{\bf Z}}
+
+\newcommand{\bfa}{{\bf a}}
+\newcommand{\bfb}{{\bf b}}
+\newcommand{\bfc}{{\bf c}}
+\newcommand{\bfe}{{\bf e}}
+\newcommand{\bfg}{{\bf g}}
+\newcommand{\bfh}{{\bf h}}
+\newcommand{\bfj}{{\bf j}}
+\newcommand{\bfk}{{\bf k}}
+\newcommand{\bfi}{{\bf i}}
+\newcommand{\bfs}{{\bf s}}
+\newcommand{\bfx}{{\bf x}}
+\newcommand{\bfy}{ {\bf y}}
+\newcommand{\bfu}{{\bf u}}
+\newcommand{\bfq}{{\bf q}}
+\newcommand{\bfp}{{\bf p}}
+\newcommand{\bfn}{{\bf n}}
+\newcommand{\bfd}{{\bf d}}
+\newcommand{\bfm}{{\bf m}}
+\newcommand{\bfr}{{\bf r}}
+\newcommand{\bff}{{\bf f}}
+\newcommand{\bfv}{{\bf v}}
+\newcommand{\bfw}{{\bf w}}
+\newcommand{\bfz}{{\bf z}}
+\newcommand{\bft}{{\bf t}}
+\newcommand{\bfdr}{{\bf{dr}}}
+
+
+\newcommand{\bfTheta}{{\boldsymbol \Theta}}
+\newcommand{\bfPsi}{{\boldsymbol \Psi}}
+\newcommand{\bflambda}{{\boldsymbol \lambda}}
+\usepackage{calc}
+\begin{document}
+
+
+%%%%%%%%% TITLE
+\title{n-pendulum}
+\author[$\dagger$]{Tue Boesen}
+
+\maketitle
+
+We wish to simulate a n-pendulum, with massless rods.
+
+In order to simulate this we use the Lagrangian approach, where we have a Lagrange function, $L$:
+\begin{equation}
+L = T - V,
+\end{equation}
+where $T$ is the kinetic energy, and $V$ is the potential energy.
+\begin{equation}
+V = g \sum_{i=1}^n m_i y_i, 
+\end{equation}
+\begin{equation}
+T = \frac{1}{2} \sum_{i=1}^n m_i v_i^2,
+\end{equation}
+with $m$ being the mass of a pendulum, $g=-9.82 m/s^2$ being gravity acceleration and $v$ being the velocity.
+
+The Lagrangian then has to obey the Euler-Lagrange equation:
+\begin{equation}
+\frac{d}{dt}\left( \frac{\partial L}{\partial \dot{q}_i} \right) = \frac{\partial L}{\partial q_i}
+\end{equation}
+
+We start by assuming all pendulums have a length of 1.
+The cartesian coordinates and velocities are related to the angles and angular velocities in the following way:
+\begin{equation}
+x_i = \sum_{j=1}^i \sin(\theta_j)
+\end{equation}
+\begin{equation}
+y_i = - \sum_{j=1}^i \cos (\theta_j)
+\end{equation}
+\begin{equation}
+\dot{x}_i = \sum_{j=1}^i \dot{\theta}_j \cos(\theta_j)
+\end{equation}
+\begin{equation}
+\dot{y}_i = \sum_{j=1}^i \dot{\theta}_j \sin(\theta_j)
+\end{equation}
+
+Hence we can express the kinetic energy as:
+\begin{align}
+T &= \frac{1}{2} \sum_{i} m_i v_i^2 \\ 
+&= \frac{1}{2} \sum_i m_i \left( \left[ \sum_{j=1}^i \dot{\theta}_j \cos \theta_j \right]^2 + \left[ \sum_{j=1}^i  \dot{\theta}_j \sin \theta_j \right]^2 \right) \\
+&= \frac{1}{2} \sum_i m_i \left( \sum_{j=1}^i \left[ \dot{\theta}_j^2 \cos^2 \theta_j + 2 \dot{\theta}_j \cos \theta_j \sum_{k = 1}^{j-1}  \dot{\theta}_k \cos\theta_k \right] + \sum_{j=1}^i \left[ \dot{\theta}_j^2 \sin^2 \theta_j + 2 \dot{\theta}_j \sin \theta_j \sum_{k =1}^{j-1}  \dot{\theta}_k \sin\theta_k  \right] \right) \\
+&= \frac{1}{2} \sum_i m_i \left( \sum_{j=1}^i \dot{\theta}_j^2 + 2 \dot{\theta}_j \sum_{k =1 }^{j-1}  \dot{\theta}_k \cos \theta_j \cos\theta_k + 2 \dot{\theta}_j \sum_{k = 1}^{j-1}   \dot{\theta}_k \sin \theta_j  \sin\theta_k \right) \\
+&= \frac{1}{2} \sum_i m_i \left( \sum_{j=1}^i \dot{\theta}_j^2 + 2 \dot{\theta}_j \sum_{k =1}^{j-1}  \dot{\theta}_k \left[\cos \theta_j \cos\theta_k + \sin \theta_j  \sin\theta_k \right] \right) \\
+&= \frac{1}{2} \sum_i m_i \left( \sum_{j=1}^i \dot{\theta}_j^2 + 2 \dot{\theta}_j \sum_{k=1}^{j-1}  \dot{\theta}_k \cos(\theta_k-\theta_j) \right)
+\end{align}
+
+And the potential energy as:
+\begin{align}
+V &= g \sum_i m_i y_i \\
+&= - g \sum_i m_i \sum_{j=1}^i \cos \theta_j
+\end{align}
+
+For convenience we set $m=1$
+
+Which gives us:
+
+\begin{align}
+T &= \sum_i \left( \sum_{j=1}^i \frac{1}{2} \dot{\theta}_j^2 + \dot{\theta}_j \sum_{k=1}^{j-1}  \dot{\theta}_k \cos(\theta_k-\theta_j) \right) \\
+&= \sum_{j=1}^n (n-j+1) \left( \frac{1}{2} \dot{\theta}_j^2 + \dot{\theta}_j \sum_{k=1}^{j-1}  \dot{\theta}_k \cos(\theta_k-\theta_j) \right)
+\end{align}
+
+\begin{align}
+V &= - g \sum_i m_i \sum_{j=1}^i \cos \theta_j \\
+&= - g \sum_i (n-i+1) \cos \theta_i
+\end{align}
+
+Hence the Lagrangian is in angular coordinates given as:
+\begin{equation}
+L = \sum_{j=1}^n (n-j+1) \left( \frac{1}{2} \dot{\theta}_j^2 + \dot{\theta}_j \sum_{k=1}^{j-1}  \dot{\theta}_k \cos(\theta_k-\theta_j) \right) + g \sum_j (n-j+1) \cos \theta_j
+\end{equation}
+
+We start evaluating terms needed for the Euler-Lagrange equation:
+
+\begin{align}
+\frac{\partial L}{\partial \dot{\theta}_i} &= \frac{\partial T}{\partial \dot{\theta}_i} \\
+&= \frac{\partial }{\partial \dot{\theta}_i} \sum_{j=1}^n (n-j+1) \left( \frac{1}{2} \dot{\theta}_j^2 + \dot{\theta}_j \sum_{k=1}^{j-1}  \dot{\theta}_k \cos(\theta_k-\theta_j) \right) \\
+&= (n-i+1) \dot{\theta}_i + \sum_{j=1}^n (n-j+1) \sum_{k=1}^{j-1} \left[\delta_{ij} \dot{\theta}_k + \dot{\theta}_j \delta_{ki} \right] \cos(\theta_k-\theta_j) \\
+&= (n-i+1) \dot{\theta}_i + \sum_{j=1}^n (n-j+1) \sum_{k=1}^{j-1} \delta_{ij} \dot{\theta}_k \cos(\theta_k-\theta_j) + \dot{\theta}_j \delta_{ki} \cos(\theta_k-\theta_j) \\
+&= (n-i+1) \dot{\theta}_i + \sum_{j=1}^n (n-j+1) \delta_{ij} \sum_{k=1}^{j-1} \dot{\theta}_k \cos(\theta_k-\theta_j) +  \sum_{j=1}^n (n-j+1) \sum_{k=1}^{j-1} \dot{\theta}_j \delta_{ki} \cos(\theta_k-\theta_j) \\
+&= (n-i+1) \dot{\theta}_i + (n-i+1) \sum_{k=1}^{i-1} \dot{\theta}_k \cos(\theta_k-\theta_i) +  \sum_{j=i+1}^n (n-j+1) \dot{\theta}_j \cos(\theta_i-\theta_j) \\
+&= (n-i+1) \dot{\theta}_i + (n-i+1) \sum_{j=1}^{i-1} \dot{\theta}_j \cos(\theta_j-\theta_i) +  \sum_{j=i+1}^n (n-j+1) \dot{\theta}_j \cos(\theta_i-\theta_j) \\
+&= c(i) \dot{\theta}_i + c(i) \sum_{j=1}^{i-1} \dot{\theta}_j \cos(\theta_j-\theta_i) +  \sum_{j=i+1}^n c(i,j) \dot{\theta}_j \cos(\theta_i-\theta_j) \\
+&= c(i) \dot{\theta}_i + \sum_{j \neq i}^{n} c(i,j) \dot{\theta}_j \cos(\theta_j-\theta_i)
+\end{align}
+where
+\begin{equation}
+c(i) = n - i +1
+\end{equation}
+and
+\begin{equation}
+c(i,j) = n - max(i,j) + 1
+\end{equation}
+
+Next we calculate the time derivative of it:
+\begin{align}
+\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta}_i} &= \frac{d}{dt} \left( c(i) \dot{\theta}_i + \sum_{j \neq i}^{n} c(i,j) \dot{\theta}_j \cos(\theta_i-\theta_j) \right) \\
+&= c(i) \ddot{\theta}_i + \sum_{j \neq i}^{n} c(i,j) \left[ \ddot{\theta}_j \cos(\theta_i-\theta_j) - \dot{\theta}_i \dot{\theta}_j \sin(\theta_i - \theta_j) + \dot{\theta}_j^2 \sin(\theta_i - \theta_j) \right] \\
+&= \sum_{j=1}^{n} c(i,j) \left[ \ddot{\theta}_j \cos(\theta_i-\theta_j) - \dot{\theta}_i \dot{\theta}_j \sin(\theta_i - \theta_j) + \dot{\theta}_j^2 \sin(\theta_i - \theta_j) \right] \\
+\end{align}
+
+Next we calculate $\frac{\partial L}{\partial \theta_i}$:
+\begin{align}
+\frac{\partial L}{\partial \theta_i} &= \sum_{j=1}^n c(j) \dot{\theta}_j \sum_{k=1}^{j-1} \dot{\theta}_k (- \sin(\theta_k - \theta_j) \delta_{ki} + \sin(\theta_k-\theta_j)\delta_{ji} - g \sum_j c(j) \sin(\theta_j) \delta_{ij} \\
+&= -\sum_{j=1}^n c(j) \dot{\theta}_j \sum_{k=1}^{j-1} \dot{\theta}_k \sin(\theta_k - \theta_j) \delta_{ki} + c(i) \dot{\theta}_i \sum_{k=1}^{i-1} \dot{\theta}_k \sin(\theta_k-\theta_i) - g c(i) \sin(\theta_i) \\
+&= -\sum_{j=i+1}^n c(j) \dot{\theta}_j \dot{\theta}_i \sin(\theta_i - \theta_j) + c(i) \dot{\theta}_i \sum_{k=1}^{i-1} \dot{\theta}_k \sin(\theta_k-\theta_i) - g c(i) \sin(\theta_i) \\
+&= -\sum_{j=1}^n c(i,j) \dot{\theta}_j \dot{\theta}_i \sin(\theta_i - \theta_j) - g c(i) \sin(\theta_i)
+\end{align}
+
+Hence for the Euler-Lagrange equation we get:
+\begin{equation}
+\sum_{j=1}^{n} c(i,j) \left[ \ddot{\theta}_j \cos(\theta_i-\theta_j) - \dot{\theta}_i \dot{\theta}_j \sin(\theta_i - \theta_j) + \dot{\theta}_j^2 \sin(\theta_i - \theta_j) \right] + \sum_{j=1}^n c(i,j) \dot{\theta}_j \dot{\theta}_i \sin(\theta_i - \theta_j) + g c(i) \sin(\theta_i) = 0
+\end{equation}
+Where some of the terms cancel out:
+\begin{equation}
+\sum_{j=1}^{n} c(i,j) \left[ \ddot{\theta}_j \cos(\theta_i-\theta_j) + \dot{\theta}_j^2 \sin(\theta_i - \theta_j) \right] + g c(i) \sin(\theta_i) = 0
+\end{equation}
+Which we can rearange as:
+\begin{equation}
+\sum_{j=1}^{n} c(i,j) \ddot{\theta}_j \cos(\theta_i-\theta_j) = - g c(i) \sin(\theta_i) - \sum_{j=1}^{n} c(i,j) \dot{\theta}_j^2 \sin(\theta_i - \theta_j) 
+\end{equation}
+Which we can solve as a linear system
+\end{document}
+
+
