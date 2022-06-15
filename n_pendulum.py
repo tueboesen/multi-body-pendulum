@@ -123,7 +123,7 @@ class NPendulum:
         y = torch.zeros(n+1,ns)
         for i in range(n):
             x[i+1] = x[i] + torch.sin(theta[i])
-            y[i+1] = y[i] + torch.cos(theta[i])
+            y[i+1] = y[i] - torch.cos(theta[i])
         return x, y
 
 def animate_pendulum(x,y,save=None):
@@ -166,7 +166,7 @@ def animate_pendulum(x,y,save=None):
 
 
 if __name__ == '__main__':
-    n = 15
+    n = 5
     dt = 0.01
     Npend = NPendulum(n,dt)
 
