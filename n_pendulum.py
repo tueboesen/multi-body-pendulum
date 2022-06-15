@@ -14,7 +14,7 @@ class NPendulum:
         self.A = torch.zeros((n,n))
         self.b = torch.zeros((n))
         self.x = torch.zeros((n))
-        self.g = -9.82
+        self.g = 9.82
         self.dt = dt
 
         C = torch.zeros(n,n)
