@@ -8,7 +8,7 @@ and the energy:
 ![Energy](https://github.com/tueboesen/multi-body-pendulum/blob/master/docs/energy.png)
 
 ## Installation
-pip install multibodypendulum
+    pip install multibodypendulum
 
 ## Quick start
 A quick usecase to simulate a 5 pendulum system could look like this
