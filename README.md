@@ -1,16 +1,14 @@
 # Multi body pendulum
 
-
-
 [![Build Status][build-image]][build-url]
 [![Code Coverage][coverage-image]][coverage-url]
 
 <!-- Badges: -->
 
-[build-image]: https://github.com/mathspp/extendedjson/actions/workflows/build.yaml/badge.svg
-[build-url]: https://github.com/mathspp/extendedjson/actions/workflows/build.yaml
-[coverage-image]: https://codecov.io/gh/mathspp/extendedjson/branch/main/graph/badge.svg
-[coverage-url]: https://codecov.io/gh/mathspp/extendedjson/
+[build-image]: https://github.com/tueboesen/multi-body-pendulum/actions/workflows/build.yaml/badge.svg
+[build-url]: https://github.com/tueboesen/multi-body-pendulum/actions/workflows/build.yaml
+[coverage-image]: https://codecov.io/gh/tueboesen/multi-body-pendulum/branch/master/graph/badge.svg
+[coverage-url]: https://codecov.io/gh/tueboesen/multi-body-pendulum/
 
 Simulation software for multi-body pendulums using Runge-Kutta 4, and with vizualization of the pendulum:
 
