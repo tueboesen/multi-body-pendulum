@@ -6,6 +6,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -30,3 +31,8 @@ jobs:
 
       - name: Run tox
         run: tox
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+            fail_ci_if_error: true
