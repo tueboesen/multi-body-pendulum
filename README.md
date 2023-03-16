@@ -1,4 +1,12 @@
 # Multi body pendulum
+
+[![PyPI Version][pypi-image]][pypi-url]
+[![Build Status][build-image]][build-url]
+[![Code Coverage][coverage-image]][coverage-url]
+[![][stars-image]][stars-url]
+[![][versions-image]][versions-url]
+
+
 Simulation software for multi-body pendulums using Runge-Kutta 4, and with vizualization of the pendulum:
 
 ![5-body pendulum animation](https://github.com/tueboesen/multi-body-pendulum/blob/master/docs/multibodypendulum.gif)
@@ -28,5 +36,3 @@ A quick usecase to simulate a 5 pendulum system could look like this
 The code has some limitations:
 - The simulation uses pytorch. The code could easily be ported to numpy as well, but for now it uses pytorch.
 - The simulation assumes pendulums of mass 1 kg, and length between pendulums of 1 m. These assumptions significantly speeds up the simulation and was all I needed for my usecase.
-
-

@@ -13,16 +13,16 @@ def test_stability():
     But for now we just test that the energy drift decreases as the step size goes down
     """
     n = 10
-    dts = [0.02,0.01,0.005,0.0025,0.00125]
+    dts = [0.02, 0.01, 0.005, 0.0025, 0.00125]
     theta0 = 0.5 * math.pi * torch.ones(n)
     dtheta0 = 0.0 * torch.ones(n)
     nsteps = 1000
     Edrift = []
     g = 9.82
     for dt in dts:
-        mbp = MultiBodyPendulum(n, dt,g=g)
-        nsteps = round(2/dt)
-        mbp.simulate(nsteps=nsteps,theta_start=theta0,dtheta_start=dtheta0)
+        mbp = MultiBodyPendulum(n, dt, g=g)
+        nsteps = round(2 / dt)
+        mbp.simulate(nsteps=nsteps, theta_start=theta0, dtheta_start=dtheta0)
         E = mbp.energy
         En = (E - E[0]).abs()
         Emean = En.mean()
@@ -36,16 +36,18 @@ class TestAngleCartesian:
     n = 3
     dt = 0.001
     g = 9.82
-    mbp = MultiBodyPendulum(n, dt,g=g)
-    @pytest.mark.parametrize("x, y, vx, vy, theta, dtheta, error", [
-        (0.0, -1.0, 0.0, 0.0, 0.0, 0.0, None),
-        (1.0, 0.0, 0.0, 0.0, pi/2.0, 0.0, None),
-        (1.0, 0.0, 0.0, 5.0, pi/2.0, 5.0, None),
-        (1, 0.0, 0.0, 0.0, pi/2.0, 0.0, True),
-    ])
+    mbp = MultiBodyPendulum(n, dt, g=g)
 
-
-    def test_known_angles_and_coordinates(self, x,y,vx,vy,theta,dtheta,error):
+    @pytest.mark.parametrize(
+        "x, y, vx, vy, theta, dtheta, error",
+        [
+            (0.0, -1.0, 0.0, 0.0, 0.0, 0.0, None),
+            (1.0, 0.0, 0.0, 0.0, pi / 2.0, 0.0, None),
+            (1.0, 0.0, 0.0, 5.0, pi / 2.0, 5.0, None),
+            (1, 0.0, 0.0, 0.0, pi / 2.0, 0.0, True),
+        ],
+    )
+    def test_known_angles_and_coordinates(self, x, y, vx, vy, theta, dtheta, error):
         x = torch.tensor([x])
         y = torch.tensor([y])
         vx = torch.tensor([vx])
@@ -55,8 +57,8 @@ class TestAngleCartesian:
 
         if error is not None:
             with pytest.raises(Exception) as e_info:
-                x1,y1,vx1,vy1 = self.mbp.get_coordinates_from_angles(theta,dtheta)
-                theta1,dtheta1 = self.mbp.get_angles_from_coordinates(x,y,vx,vy)
+                x1, y1, vx1, vy1 = self.mbp.get_coordinates_from_angles(theta, dtheta)
+                theta1, dtheta1 = self.mbp.get_angles_from_coordinates(x, y, vx, vy)
         else:
             x1, y1, vx1, vy1 = self.mbp.get_coordinates_from_angles(theta, dtheta)
             theta1, dtheta1 = self.mbp.get_angles_from_coordinates(x, y, vx, vy)
@@ -70,10 +72,9 @@ class TestAngleCartesian:
     def test_angles_and_cartesian_are_reversible(self):
         # npenduls = torch.randint(1,100,10)
         # for n in npenduls:
-        theta = (2*torch.rand(10,100))*pi
-        dtheta = (2*torch.rand(10,100))*10
+        theta = (2 * torch.rand(10, 100)) * pi
+        dtheta = (2 * torch.rand(10, 100)) * 10
         (x, y, vx, vy) = self.mbp.get_coordinates_from_angles(theta, dtheta)
         t1, dt1 = self.mbp.get_angles_from_coordinates(x, y, vx, vy)
         assert theta == pytest.approx(t1)
         assert dtheta == pytest.approx(dtheta)
-
