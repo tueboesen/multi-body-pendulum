@@ -1,5 +1,5 @@
 # .github/workflows/build.yaml
-name: multibodypendulum CI
+name: Testing CI
 
 on:
   push:

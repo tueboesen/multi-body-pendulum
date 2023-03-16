@@ -1,0 +1,1 @@
+from npendul import MultiBodyPendulum
