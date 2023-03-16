@@ -4,7 +4,8 @@ from math import pi
 import pytest
 import torch
 
-from src.n_pendulum import MultiBodyPendulum
+from multibodypendulum.npendul import MultiBodyPendulum
+
 
 def test_stability():
     """

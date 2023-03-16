@@ -18,7 +18,7 @@ class MultiBodyPendulum:
     """
     A multibody pendulum class, which enables the simulation of a pendulum with massless rigid strings between n point masses.
 
-    Note that this code only supports pendulums where all pendulums have a length of 1.
+    Note that this code only supports pendulums where all pendulums have a length of 1m and mass of 1kg.
     """
     def __init__(self, npendulums: int, dt: float, g: float = 9.82):
         """
@@ -267,7 +267,7 @@ class MultiBodyPendulum:
             self.dthetas[:,i+1] = dtheta
         return t, self.thetas, self.dthetas
 
-    def animate_pendulum(self, delay_between_frames=2, save=None):
+    def animate_pendulum(self, delay_between_frames=2, file=None):
         """
         Animates the pendulum.
         If save is None it will show a movie in python
@@ -289,7 +289,7 @@ class MultiBodyPendulum:
         lines = [line, line2]
 
         v_origo = np.asarray([x[1:, 0], y[1:, 0]])
-        arrows = plt.quiver(*v_origo, vx[1:, 0], vy[1:, 0], color='r', scale=100, width=0.003)
+        arrows = plt.quiver(*v_origo, vx[1:, 0], vy[1:, 0], color='g', scale=100, width=0.003)
         lines.append(arrows)
 
         def init():
@@ -307,11 +307,12 @@ class MultiBodyPendulum:
             return lines
 
         ani = animation.FuncAnimation(fig, update, frames=np.arange(1, nsteps), init_func=init, interval=delay_between_frames, blit=True)
-        if save is None:
+        if file is None:
             plt.show()
         else:
             writergif = animation.PillowWriter(fps=30)
-            ani.save(save, writer=writergif)
+            ani.save(file, writer=writergif)
+        return (fig, ax)
 
     @staticmethod
     def plot_pendulum(x,y,vx=None,vy=None,fighandler=None,color_velocity='red',color_pendulums='blue',color_strings='grey',file=None):
@@ -347,7 +348,10 @@ class MultiBodyPendulum:
             plt.close()
         return (fig, ax)
 
-    def plot_energy(self):
+    def plot_energy(self,file=None):
+        """
+        Plots the kinetic, potential and total energy. Also plots the total energy separately so energy drift over the simulation can easily be seen.
+        """
         import matplotlib.pyplot as plt
         plt.subplot(211)
         x,y = self.xy
@@ -364,25 +368,32 @@ class MultiBodyPendulum:
         plt.plot(E, label='Energy')
         plt.legend()
 
-        plt.show()
-        plt.pause(1)
+        if file is not None:
+            os.makedirs(os.path.dirname(file), exist_ok=True)
+            plt.savefig(file)
+            plt.close()
+        else:
+            plt.show()
+            plt.pause(0.1)
+        return
+
 
 
 if __name__ == '__main__':
     n = 5
-    dt = 0.001
+    dt = 0.01
     g = 9.82
     mbp = MultiBodyPendulum(n, dt,g=g)
     theta0 = 0.5*math.pi*torch.ones(n)
     dtheta0 = 0.0*torch.ones(n)
-    nsteps = 10000
+    nsteps = 1000
 
     t0 = time.time()
     times, thetas, dthetas = mbp.simulate(nsteps,theta0,dtheta0)
     t1 = time.time()
     print(f"simulated {nsteps} steps for a {n}-pendulum in {t1-t0:2.2f}s")
-    # mbp.animate_pendulum()
-    mbp.plot_energy()
+    # mbp.plot_energy(file='./energy.png')
+    mbp.animate_pendulum()
     x,y = mbp.xy
     vx,vy = mbp.vxy
     x2 = mbp.extend_tensor(x)
@@ -390,5 +401,5 @@ if __name__ == '__main__':
     vx2 = mbp.extend_tensor(vx)
     vy2 = mbp.extend_tensor(vy)
 
-    idx = randint(nsteps)
-    mbp.plot_pendulum(x2[:,idx],y2[:,idx],vx2[:,idx],vy2[:,idx])
+    idx = randint(0,nsteps-1)
+    # mbp.plot_pendulum(x2[:,idx],y2[:,idx],vx2[:,idx],vy2[:,idx],file='./pendulum-snapshot.png')
