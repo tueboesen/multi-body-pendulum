@@ -1,11 +1,14 @@
 # Multi body pendulum
 
-[![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
 [![Code Coverage][coverage-image]][coverage-url]
-[![][stars-image]][stars-url]
-[![][versions-image]][versions-url]
 
+<!-- Badges: -->
+
+[build-image]: https://github.com/mathspp/extendedjson/actions/workflows/build.yaml/badge.svg
+[build-url]: https://github.com/mathspp/extendedjson/actions/workflows/build.yaml
+[coverage-image]: https://codecov.io/gh/mathspp/extendedjson/branch/main/graph/badge.svg
+[coverage-url]: https://codecov.io/gh/mathspp/extendedjson/
 
 Simulation software for multi-body pendulums using Runge-Kutta 4, and with vizualization of the pendulum:
 

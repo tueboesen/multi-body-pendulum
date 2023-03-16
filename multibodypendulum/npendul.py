@@ -3,13 +3,10 @@ import os
 from random import randint
 
 import matplotlib
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
-
-matplotlib.use("TkAgg")
-import matplotlib.animation as animation
-import numpy as np
 
 torch.set_default_dtype(torch.float64)
 import time
