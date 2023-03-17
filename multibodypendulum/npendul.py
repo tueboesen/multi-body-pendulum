@@ -429,7 +429,7 @@ if __name__ == "__main__":
     times, thetas, dthetas = mbp.simulate(nsteps, theta0, dtheta0)
     t1 = time.time()
     print(f"simulated {nsteps} steps for a {n}-pendulum in {t1-t0:2.2f}s")
-    mbp.plot_energy() #file="../docs/energy.png"
+    mbp.plot_energy()  # file="../docs/energy.png"
     mbp.animate_pendulum()
     x, y = mbp.xy
     vx, vy = mbp.vxy
@@ -439,4 +439,6 @@ if __name__ == "__main__":
     vy2 = mbp.extend_tensor(vy)
 
     idx = randint(0, nsteps - 1)
-    mbp.plot_pendulum(x2[:,idx],y2[:,idx],vx2[:,idx],vy2[:,idx]) #file='./pendulum-snapshot.png'
+    mbp.plot_pendulum(
+        x2[:, idx], y2[:, idx], vx2[:, idx], vy2[:, idx]
+    )  # file='./pendulum-snapshot.png'
