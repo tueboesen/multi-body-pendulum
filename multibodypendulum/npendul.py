@@ -395,12 +395,9 @@ class MultiBodyPendulum:
         import matplotlib.pyplot as plt
 
         plt.subplot(211)
-        x, y = self.xy
-        vx, vy = self.vxy
-        v2 = vx**2 + vy**2
-        K = 0.5 * torch.sum(v2, dim=0)
-        V = g * torch.sum(y, dim=0)
-        E = K + V
+        K = self.energy_kinetic
+        V = self.energy_potential
+        E = self.energy
         plt.plot(E, label="Energy")
         plt.plot(K, label="Kinetic energy")
         plt.plot(V, label="Potential energy")
@@ -432,8 +429,8 @@ if __name__ == "__main__":
     times, thetas, dthetas = mbp.simulate(nsteps, theta0, dtheta0)
     t1 = time.time()
     print(f"simulated {nsteps} steps for a {n}-pendulum in {t1-t0:2.2f}s")
-    mbp.plot_energy(file="../docs/energy.png")
-    # mbp.animate_pendulum()
+    mbp.plot_energy() #file="../docs/energy.png"
+    mbp.animate_pendulum()
     x, y = mbp.xy
     vx, vy = mbp.vxy
     x2 = mbp.extend_tensor(x)
@@ -442,4 +439,4 @@ if __name__ == "__main__":
     vy2 = mbp.extend_tensor(vy)
 
     idx = randint(0, nsteps - 1)
-    # mbp.plot_pendulum(x2[:,idx],y2[:,idx],vx2[:,idx],vy2[:,idx],file='./pendulum-snapshot.png')
+    mbp.plot_pendulum(x2[:,idx],y2[:,idx],vx2[:,idx],vy2[:,idx]) #file='./pendulum-snapshot.png'

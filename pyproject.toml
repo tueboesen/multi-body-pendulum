@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "multibodypendulum"
-version = "0.2.1"
+version = "0.2.2"
 description = "Simulates a multi-body-pendulum"
 authors = ["Tue Boesen <tue.boesen@protonmail.com>"]
 license = "MIT"
