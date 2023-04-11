@@ -19,6 +19,9 @@ and the energy:
 
 ![Energy](https://github.com/tueboesen/multi-body-pendulum/blob/master/docs/energy.png)
 
+My notes/derivation of the governing system of equations for this system can be found 
+[here](https://github.com/tueboesen/multi-body-pendulum/blob/master/docs/n-pendulum.pdf).
+
 ## Installation
     pip install multibodypendulum
 
@@ -39,5 +42,7 @@ A quick usecase to simulate a 5 pendulum system could look like this
 
 ## Limitations
 The code has some limitations:
-- The simulation uses pytorch. The code could easily be ported to numpy as well, but for now it uses pytorch.
 - The simulation assumes pendulums of mass 1 kg, and length between pendulums of 1 m. These assumptions significantly speeds up the simulation and was all I needed for my usecase.
+
+## Contribution
+- The simulation uses pytorch, but could easily be ported to numpy, which would make it easier to use for a lot of people. I haven't done this since I primarily use pytorch so it doesn't matter to me, but if others need it, it could be a nice contribution project.
